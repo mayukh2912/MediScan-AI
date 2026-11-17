@@ -1,0 +1,10 @@
+**/node_modules
+frontend
+datasets
+notebooks
+tests
+docs
+**/__pycache__
+**/*.db
+backend/storage
+.git

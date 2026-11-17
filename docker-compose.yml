@@ -1,0 +1,17 @@
+# Local full stack: PostgreSQL + API (+ run the frontend with `npm run dev` in ./frontend)
+services:
+  db:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: mediscan, POSTGRES_PASSWORD: mediscan, POSTGRES_DB: mediscan }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    environment:
+      DATABASE_URL: postgresql+psycopg://mediscan:mediscan@db:5432/mediscan
+      CORS_ORIGINS: http://localhost:3000
+      MEDISCAN_ENCRYPTION_KEY: ${MEDISCAN_ENCRYPTION_KEY:?set MEDISCAN_ENCRYPTION_KEY in .env}
+    ports: ["8000:8000"]
+    volumes: [apidata:/data]
+    depends_on: [db]
+volumes: { pgdata: {}, apidata: {} }
